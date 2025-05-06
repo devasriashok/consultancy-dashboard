@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { FaUser, FaIdCard, FaGraduationCap, FaBirthdayCake, FaEnvelope, FaPhone, FaPhoneAlt, FaBriefcase, FaArrowLeft, FaPlus, FaList } from "react-icons/fa";
 
 const EmployeeForm = () => {
   const [formData, setFormData] = useState({
@@ -72,161 +73,188 @@ const EmployeeForm = () => {
     setShowEmployeeList(false);
   };
 
-  const tableHeaderStyle = {
-    padding: "12px 15px",
-    textAlign: "left",
-    fontWeight: "600",
-    borderBottom: "2px solid #ddd"
-  };
-
-  const tableCellStyle = {
-    padding: "12px 15px",
-    color: "#444",
-    backgroundColor: "#fff"
-  };
-
   if (showEmployeeList) {
     return (
-      <div
-        style={{
-          minHeight: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundImage: "url(https://joinus.juspay.in/515226a3e13ebf7172c5.jpg)",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          padding: "20px",
-          fontFamily: "General Sans, sans-serif"
-        }}
-      >
-        <div
-          style={{
-            backgroundColor: "rgba(255, 255, 255, 0.95)",
-            width: "100%",
-            maxWidth: "1000px",
-            padding: "30px",
-            borderRadius: "12px",
-            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)"
-          }}
-        >
-          <h2 style={{ fontSize: "28px", fontWeight: "600", marginBottom: "20px", textAlign: "center", color: "#333" }}>
-            Employee List
-          </h2>
+      <div className="employee-container">
+        <div className="employee-card">
+          <div className="card-header">
+            <h2>
+              <FaUser /> Employee List
+            </h2>
+            <button onClick={handleBack} className="back-btn">
+              <FaArrowLeft /> Back to Add Employee
+            </button>
+          </div>
 
-          <button
-            onClick={handleBack}
-            style={{
-              marginBottom: "20px",
-              padding: "10px 18px",
-              backgroundColor: "#6c757d",
-              color: "#fff",
-              border: "none",
-              borderRadius: "6px",
-              cursor: "pointer",
-              fontSize: "16px"
-            }}
-          >
-            ← Back to Add Employee
-          </button>
-
-          <div style={{ overflowX: "auto" }}>
-            <table
-              style={{
-                width: "100%",
-                borderCollapse: "collapse",
-                fontSize: "15px",
-                backgroundColor: "#fff",
-                borderRadius: "6px",
-                overflow: "hidden",
-                boxShadow: "0 2px 8px rgba(0,0,0,0.05)"
-              }}
-            >
-              <thead style={{ backgroundColor: "#f1f1f1", color: "#333" }}>
+          <div className="table-container">
+            <table className="employee-table">
+              <thead>
                 <tr>
-                  <th style={tableHeaderStyle}>ID</th>
-                  <th style={tableHeaderStyle}>Name</th>
-                  <th style={tableHeaderStyle}>Qualification</th>
-                  <th style={tableHeaderStyle}>Age</th>
-                  <th style={tableHeaderStyle}>Email</th>
-                  <th style={tableHeaderStyle}>Primary Contact</th>
-                  <th style={tableHeaderStyle}>Emergency Contact</th>
-                  <th style={tableHeaderStyle}>Position</th>
+                  <th><FaIdCard /> ID</th>
+                  <th><FaUser /> Name</th>
+                  <th><FaGraduationCap /> Qualification</th>
+                  <th><FaBirthdayCake /> Age</th>
+                  <th><FaEnvelope /> Email</th>
+                  <th><FaPhone /> Primary Contact</th>
+                  <th><FaPhoneAlt /> Emergency Contact</th>
+                  <th><FaBriefcase /> Position</th>
                 </tr>
               </thead>
               <tbody>
                 {employees.map((emp) => (
-                  <tr key={emp.emp_id} style={{ borderBottom: "1px solid #eee" }}>
-                    <td style={tableCellStyle}>{emp.emp_id}</td>
-                    <td style={tableCellStyle}>{emp.emp_name}</td>
-                    <td style={tableCellStyle}>{emp.qualification}</td>
-                    <td style={tableCellStyle}>{emp.age}</td>
-                    <td style={tableCellStyle}>{emp.email}</td>
-                    <td style={tableCellStyle}>{emp.contact_details?.primary || "N/A"}</td>
-                    <td style={tableCellStyle}>{emp.contact_details?.emergency || "N/A"}</td>
-
-                    <td style={tableCellStyle}>{emp.position}</td>
+                  <tr key={emp.emp_id}>
+                    <td>{emp.emp_id}</td>
+                    <td>{emp.emp_name}</td>
+                    <td>{emp.qualification}</td>
+                    <td>{emp.age}</td>
+                    <td>{emp.email}</td>
+                    <td>{emp.contact_details?.primary || "N/A"}</td>
+                    <td>{emp.contact_details?.emergency || "N/A"}</td>
+                    <td>{emp.position}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
         </div>
+
+        <style jsx>{`
+          :root {
+            --primary-color: #FFD700;
+            --secondary-color: #1A1A1A;
+            --accent-color: #FFC000;
+            --light-color: #F8F8F8;
+            --dark-color: #2D2D2D;
+            --text-color: #333333;
+            --text-light: #777777;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+          }
+
+          .employee-container {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--light-color);
+            padding: 20px;
+            font-family: 'Inter', sans-serif;
+          }
+
+          .employee-card {
+            background: white;
+            width: 100%;
+            max-width: 1200px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+          }
+
+          .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+          }
+
+          .card-header h2 {
+            color: var(--secondary-color);
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0;
+          }
+
+          .back-btn {
+            padding: 10px 20px;
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            transition: var(--transition);
+          }
+
+          .back-btn:hover {
+            background: #333;
+          }
+
+          .table-container {
+            overflow-x: auto;
+          }
+
+          .employee-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+          }
+
+          .employee-table th {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 500;
+            border-bottom: 3px solid var(--primary-color);
+          }
+
+          .employee-table th svg {
+            margin-right: 8px;
+          }
+
+          .employee-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            color: var(--text-color);
+          }
+
+          .employee-table tr:hover {
+            background-color: rgba(255, 215, 0, 0.05);
+          }
+
+          @media (max-width: 768px) {
+            .card-header {
+              flex-direction: column;
+              align-items: flex-start;
+            }
+
+            .employee-table th, 
+            .employee-table td {
+              padding: 10px 8px;
+              font-size: 14px;
+            }
+          }
+        `}</style>
       </div>
     );
   }
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundImage: "url(https://joinus.juspay.in/515226a3e13ebf7172c5.jpg)",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        padding: "20px"
-      }}
-    >
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          backgroundColor: "rgba(255, 255, 255, 0.95)",
-          width: "100%",
-          maxWidth: "600px",
-          padding: "30px",
-          borderRadius: "12px",
-          boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
-          fontFamily: "General Sans, sans-serif"
-        }}
-      >
-        <h2 style={{ fontSize: "32px", color: "#333", fontWeight: "600", marginBottom: "30px", textAlign: "center" }}>
-          Add New Employee
+    <div className="employee-container">
+      <form onSubmit={handleSubmit} className="employee-form">
+        <h2>
+          <FaUser /> Add New Employee
         </h2>
 
         {[
-          { label: "Employee ID", name: "emp_id", type: "text" },
-          { label: "Employee Name", name: "emp_name", type: "text" },
-          { label: "Qualification", name: "qualification", type: "text" },
-          { label: "Age", name: "age", type: "number" },
-          { label: "Email", name: "email", type: "email" },
-          { label: "Primary Contact", name: "contact_primary", type: "text" },
-          { label: "Emergency Contact", name: "contact_emergency", type: "text" }
+          { label: "Employee ID", name: "emp_id", type: "text", icon: <FaIdCard /> },
+          { label: "Employee Name", name: "emp_name", type: "text", icon: <FaUser /> },
+          { label: "Qualification", name: "qualification", type: "text", icon: <FaGraduationCap /> },
+          { label: "Age", name: "age", type: "number", icon: <FaBirthdayCake /> },
+          { label: "Email", name: "email", type: "email", icon: <FaEnvelope /> },
+          { label: "Primary Contact", name: "contact_primary", type: "text", icon: <FaPhone /> },
+          { label: "Emergency Contact", name: "contact_emergency", type: "text", icon: <FaPhoneAlt /> }
         ].map((field) => (
-          <div key={field.name} style={{ marginBottom: "25px" }}>
-            <label
-              style={{
-                display: "block",
-                fontWeight: "500",
-                fontSize: "16px",
-                color: "#333",
-                marginBottom: "8px"
-              }}
-            >
-              {field.label}
+          <div key={field.name} className="form-group">
+            <label>
+              {field.icon} {field.label}
             </label>
             <input
               type={field.type}
@@ -234,81 +262,168 @@ const EmployeeForm = () => {
               value={formData[field.name]}
               onChange={handleChange}
               required={field.name !== "contact_emergency"}
-              style={{
-                width: "100%",
-                padding: "12px 15px",
-                border: "1px solid #ddd",
-                borderRadius: "6px",
-                fontSize: "16px",
-                transition: "all 0.3s ease"
-              }}
             />
           </div>
         ))}
 
-        <div style={{ marginBottom: "25px" }}>
-          <label style={{ display: "block", fontWeight: "500", fontSize: "16px", color: "#333", marginBottom: "8px" }}>
-            Position
+        <div className="form-group">
+          <label>
+            <FaBriefcase /> Position
           </label>
           <select
-  name="position"
-  value={formData.position}
-  onChange={handleChange}
-  style={{
-    width: "100%",
-    padding: "12px 15px",
-    border: "1px solid #ddd",
-    borderRadius: "6px",
-    fontSize: "16px"
-  }}
->
-  <option>Project Manager</option>
-  <option>Site Manager</option>
-  <option>Site Supervisor</option>
-  <option>Site Engineer</option>
-  <option>Worker</option>
-</select>
-
+            name="position"
+            value={formData.position}
+            onChange={handleChange}
+          >
+            <option>Project Manager</option>
+            <option>Site Manager</option>
+            <option>Site Supervisor</option>
+            <option>Site Engineer</option>
+            <option>Worker</option>
+          </select>
         </div>
 
-        <button
-          type="submit"
-          style={{
-            backgroundColor: "#3498db",
-            color: "white",
-            border: "none",
-            padding: "14px 20px",
-            borderRadius: "6px",
-            cursor: "pointer",
-            fontSize: "16px",
-            fontWeight: "500",
-            width: "100%",
-            transition: "background-color 0.3s ease"
-          }}
-        >
-          Submit
+        <button type="submit" className="submit-btn">
+          <FaPlus /> Submit
         </button>
 
         <button
           type="button"
           onClick={fetchEmployees}
-          style={{
-            marginTop: "12px",
-            backgroundColor: "#2ecc71",
-            color: "white",
-            border: "none",
-            padding: "14px 20px",
-            borderRadius: "6px",
-            cursor: "pointer",
-            fontSize: "16px",
-            fontWeight: "500",
-            width: "100%",
-            transition: "background-color 0.3s ease"
-          }}
+          className="show-employees-btn"
         >
-          Show All Employees
+          <FaList /> Show All Employees
         </button>
       </form>
+
+      <style jsx>{`
+        :root {
+          --primary-color: #FFD700;
+          --secondary-color: #1A1A1A;
+          --accent-color: #FFC000;
+          --light-color: #F8F8F8;
+          --dark-color: #2D2D2D;
+          --text-color: #333333;
+          --text-light: #777777;
+          --shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .employee-container {
+          min-height: 100vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: var(--light-color);
+          padding: 20px;
+          font-family: 'Inter', sans-serif;
+        }
+
+        .employee-form {
+          background: white;
+          width: 100%;
+          max-width: 600px;
+          padding: 30px;
+          border-radius: 12px;
+          box-shadow: var(--shadow);
+        }
+
+        .employee-form h2 {
+          color: var(--secondary-color);
+          font-size: 1.8rem;
+          margin-bottom: 30px;
+          text-align: center;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+        }
+
+        .form-group {
+          margin-bottom: 25px;
+        }
+
+        .form-group label {
+          display: block;
+          font-weight: 500;
+          font-size: 16px;
+          color: var(--secondary-color);
+          margin-bottom: 10px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .form-group input,
+        .form-group select {
+          width: 100%;
+          padding: 12px 15px;
+          border: 1px solid #ddd;
+          border-radius: 6px;
+          font-size: 16px;
+          transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+          border-color: var(--primary-color);
+          outline: none;
+          box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+        }
+
+        .submit-btn {
+          background-color: var(--primary-color);
+          color: var(--secondary-color);
+          border: none;
+          padding: 14px 20px;
+          border-radius: 6px;
+          cursor: pointer;
+          font-size: 16px;
+          font-weight: 600;
+          width: 100%;
+          transition: var(--transition);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+        }
+
+        .submit-btn:hover {
+          background-color: var(--accent-color);
+        }
+
+        .show-employees-btn {
+          margin-top: 15px;
+          background-color: var(--secondary-color);
+          color: white;
+          border: none;
+          padding: 14px 20px;
+          border-radius: 6px;
+          cursor: pointer;
+          font-size: 16px;
+          font-weight: 500;
+          width: 100%;
+          transition: var(--transition);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+        }
+
+        .show-employees-btn:hover {
+          background-color: #333;
+        }
+
+        @media (max-width: 480px) {
+          .employee-form {
+            padding: 20px;
+          }
+
+          .employee-form h2 {
+            font-size: 1.5rem;
+          }
+        }
+      `}</style>
     </div>
   );
 };
