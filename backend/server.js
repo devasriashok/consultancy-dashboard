@@ -377,6 +377,67 @@ app.get('/api/mailrequest', async (req, res) => {
   }
 });
 
+
+
+
+const jobSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  location: { type: String, required: true },
+  description: { type: String, required: true },
+  requirements: { type: [String], required: true },
+  status: { type: String, enum: ['active', 'inactive'], default: 'active' },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now }
+});
+
+const Job = mongoose.model('Job', jobSchema);
+
+// Public API Endpoints
+app.get('/api/jobs', async (req, res) => {
+  try {
+      const jobs = await Job.find({ status: 'active' }).sort({ createdAt: -1 });
+      res.json(jobs);
+  } catch (err) {
+      res.status(500).json({ message: err.message });
+  }
+});
+
+// Admin API Endpoints
+app.get('/api/admin/jobs', async (req, res) => {
+  try {
+      const jobs = await Job.find().sort({ createdAt: -1 });
+      res.json(jobs);
+  } catch (err) {
+      res.status(500).json({ message: err.message });
+  }
+});
+
+app.post('/api/admin/jobs', async (req, res) => {
+  try {
+      const job = new Job(req.body);
+      await job.save();
+      res.status(201).json(job);
+  } catch (err) {
+      res.status(400).json({ message: err.message });
+  }
+});
+
+app.patch('/api/admin/jobs/:id', async (req, res) => {
+  try {
+      const job = await Job.findByIdAndUpdate(
+          req.params.id,
+          { status: req.body.status },
+          { new: true }
+      );
+      res.json(job);
+  } catch (err) {
+      res.status(400).json({ message: err.message });
+  }
+});
+
+
+
+
 // ------------------------ Start Server ------------------------
 
 const PORT = process.env.PORT || 5000;

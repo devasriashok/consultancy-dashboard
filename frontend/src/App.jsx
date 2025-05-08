@@ -12,6 +12,7 @@ import Leave from "./components/Leave";
 import EmployeeForm from "./pages/EmployeeForm";
 import Careers from "./pages/Careers";
 import MailRequest from "./pages/MailRequest"
+import JobManagement from "./pages/JobManagement";
 //import Careers from "./pages/Careers";
 
 // Function to safely get user data from localStorage
@@ -76,6 +77,7 @@ function App() {
           <Route path="/leave" element={<PrivateRoute><Leave /></PrivateRoute>} />
           <Route path="/careers" element={<PrivateRoute><Careers /></PrivateRoute>} />
           <Route path="/mailrequest" element={<PrivateRoute><MailRequest /></PrivateRoute>} />
+          <Route path="/jobs" element={<PrivateRoute><JobManagement /></PrivateRoute>} />
         </Routes>
       </div>
     </Router>

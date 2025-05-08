@@ -5,6 +5,17 @@ import { MdConstruction, MdWork } from 'react-icons/md';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import axios from 'axios';
+
+function ErrorFallback({ error, resetErrorBoundary }) {
+    return (
+      <div role="alert" className="error-fallback">
+        <h2>Something went wrong</h2>
+        <pre>{error.message}</pre>
+        <button onClick={resetErrorBoundary}>Try again</button>
+      </div>
+    );
+  }
 
 const AdminDashboard = () => {
     const [adminName, setAdminName] = useState("Admin");
@@ -13,6 +24,12 @@ const AdminDashboard = () => {
     const [showMainMenu, setShowMainMenu] = useState(false);
     const [notifications] = useState(3);
     const [messages] = useState(5);
+    const [stats, setStats] = useState({
+        activeProjects: 0,
+        pendingRequests: 0,
+        
+    });
+    const [loading, setLoading] = useState(true);
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -23,7 +40,34 @@ const AdminDashboard = () => {
             setAdminName(storedAdmin.name);
             setInitial(storedAdmin.name.charAt(0).toUpperCase());
         }
+
+        fetchDashboardStats();
     }, []);
+
+    const fetchDashboardStats = async () => {
+        try {
+            setLoading(true);
+            // Fetch all data in parallel
+            const [projectsRes, requestsRes] = await Promise.all([
+              axios.get('http://localhost:5000/api/projects'),
+              axios.get('http://localhost:5000/api/mailrequest')
+              
+            ]);
+            const activeProjects = projectsRes.data.projects?.length || 0;
+            const pendingRequests = requestsRes.data.length || 0; // Adjust if mailrequest has a different structure
+         // Adjust if careers has a different structure
+          
+            setStats({
+              activeProjects,
+              pendingRequests
+            });
+        } catch (error) {
+            console.error('Error fetching dashboard stats:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
 
     const handleLogout = () => {
         localStorage.removeItem("adminToken");
@@ -36,7 +80,8 @@ const AdminDashboard = () => {
         { name: "Projects", path: "project", icon: <MdConstruction /> },
         { name: "Careers", path: "careers", icon: <MdWork /> },
         { name: "Employees", path: "employee", icon: <FaUsers /> },
-        { name: "Mail Requests", path: "mailrequest", icon: <FaEnvelopeOpenText />, badge: messages }
+        { name: "Mail Requests", path: "mailrequest", icon: <FaEnvelopeOpenText />, badge: messages },
+        {name: "Job Management", path: "jobs", icon: <FaHardHat /> }
     ];
 
     const sliderSettings = {
@@ -143,17 +188,22 @@ const AdminDashboard = () => {
                         <h1>Welcome back, <span className="highlight">{adminName.split(' ')[0]}</span>!</h1>
                         <p>Track project progress, manage employee assignments, and handle client requests efficiently.</p>
                         <div className="banner-stats">
-                            <div className="stat-item">
-                                <span className="stat-number">12</span>
+                            <div className="stat-item clicakable"
+                                   onClick={() => navigateTo('project')}
+                            >
+                                <span className="stat-number">
+                                    {loading ? '...' : stats.activeProjects}
+                                    </span>
                                 <span className="stat-label">Active Projects</span>
                             </div>
-                            <div className="stat-item">
-                                <span className="stat-number">8</span>
+                            <div 
+                                className="stat-item clickable"
+                                onClick={() => navigateTo('mailrequest')}
+                            >
+                                <span className="stat-number">
+                                    {loading ? '...' : stats.pendingRequests}
+                                </span>
                                 <span className="stat-label">Pending Requests</span>
-                            </div>
-                            <div className="stat-item">
-                                <span className="stat-number">5</span>
-                                <span className="stat-label">New Applications</span>
                             </div>
                         </div>
                     </div>
@@ -165,47 +215,7 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Stats Cards */}
-                <div className="stats-container">
-                    <div className="stat-card">
-                        <div className="stat-icon">
-                            <MdConstruction />
-                        </div>
-                        <div className="stat-content">
-                            <h3>Active Projects</h3>
-                            <p>12</p>
-                            <div className="progress-bar">
-                                <div className="progress-fill" style={{width: '75%'}}></div>
-                            </div>
-                            <span className="progress-text">3 ahead of schedule</span>
-                        </div>
-                    </div>
-                    <div className="stat-card">
-                        <div className="stat-icon">
-                            <FaEnvelope />
-                        </div>
-                        <div className="stat-content">
-                            <h3>Pending Requests</h3>
-                            <p>8</p>
-                            <div className="progress-bar">
-                                <div className="progress-fill" style={{width: '40%'}}></div>
-                            </div>
-                            <span className="progress-text">2 high priority</span>
-                        </div>
-                    </div>
-                    <div className="stat-card">
-                        <div className="stat-icon">
-                            <FaUsers />
-                        </div>
-                        <div className="stat-content">
-                            <h3>New Applications</h3>
-                            <p>5</p>
-                            <div className="progress-bar">
-                                <div className="progress-fill" style={{width: '25%'}}></div>
-                            </div>
-                            <span className="progress-text">3 need review</span>
-                        </div>
-                    </div>
-                </div>
+                
 
                 {/* Recent Activity */}
                 <div className="activity-section">
@@ -254,21 +264,21 @@ const AdminDashboard = () => {
                 <div className="slider-container">
                     <Slider {...sliderSettings}>
                         <div className="slider-item">
-                            <img src="https://img.freepik.com/free-photo/excavator-action_1112-1598.jpg" alt="Construction Site" />
+                            <img src="https://img.freepik.com/premium-photo/innovative-architecture-civil-engineering-plan_31965-4427.jpg?ga=GA1.1.1995240481.1731166665&semt=ais_hybrid&w=740" alt="Construction Site" />
                             <div className="slider-caption">
                                 <h3>Ongoing Project: Skyline Tower</h3>
                                 <p>Phase 2 construction in progress</p>
                             </div>
                         </div>
                         <div className="slider-item">
-                            <img src="https://img.freepik.com/free-vector/construction-concept-illustration_114360-2558.jpg" alt="Construction Team" />
+                            <img src="https://img.freepik.com/premium-photo/realistic-famous-image_1187092-157998.jpg?ga=GA1.1.1995240481.1731166665&semt=ais_hybrid&w=740" alt="Construction Team" />
                             <div className="slider-caption">
                                 <h3>Meet Our Team</h3>
                                 <p>50+ skilled professionals working</p>
                             </div>
                         </div>
                         <div className="slider-item">
-                            <img src="https://media.istockphoto.com/id/2169553797/photo/silhouette-engineer-at-construction-site-against-sky-during-sunset.jpg" alt="Construction Engineer" />
+                            <img src="" alt="Construction Engineer" />
                             <div className="slider-caption">
                                 <h3>Quality Assurance</h3>
                                 <p>Daily inspections ensure top quality</p>
