@@ -277,13 +277,6 @@ const AdminDashboard = () => {
                                 <p>50+ skilled professionals working</p>
                             </div>
                         </div>
-                        <div className="slider-item">
-                            <img src="" alt="Construction Engineer" />
-                            <div className="slider-caption">
-                                <h3>Quality Assurance</h3>
-                                <p>Daily inspections ensure top quality</p>
-                            </div>
-                        </div>
                     </Slider>
                 </div>
             </div>

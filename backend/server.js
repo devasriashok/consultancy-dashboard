@@ -422,20 +422,74 @@ app.post('/api/admin/jobs', async (req, res) => {
   }
 });
 
+app.put('/api/admin/jobs/:id', async (req, res) => {
+  try {
+      const { title, location, description, requirements, status } = req.body;
+      
+      // Convert requirements string to array if needed
+      const requirementsArray = Array.isArray(requirements) ? 
+          requirements : 
+          requirements.split('\n').filter(r => r.trim() !== '');
+      
+      const updatedJob = await Job.findByIdAndUpdate(
+          req.params.id,
+          { 
+              title,
+              location,
+              description,
+              requirements: requirementsArray,
+              status,
+              updatedAt: Date.now()
+          },
+          { new: true }
+      );
+      
+      if (!updatedJob) {
+          return res.status(404).json({ message: 'Job not found' });
+      }
+      
+      res.json(updatedJob);
+  } catch (err) {
+      res.status(400).json({ message: err.message });
+  }
+});
+
+// PATCH endpoint for partial updates (status)
 app.patch('/api/admin/jobs/:id', async (req, res) => {
   try {
       const job = await Job.findByIdAndUpdate(
           req.params.id,
-          { status: req.body.status },
+          { 
+              status: req.body.status,
+              updatedAt: Date.now()
+          },
           { new: true }
       );
+      
+      if (!job) {
+          return res.status(404).json({ message: 'Job not found' });
+      }
+      
       res.json(job);
   } catch (err) {
       res.status(400).json({ message: err.message });
   }
 });
 
-
+// DELETE endpoint
+app.delete('/api/admin/jobs/:id', async (req, res) => {
+  try {
+      const deletedJob = await Job.findByIdAndDelete(req.params.id);
+      
+      if (!deletedJob) {
+          return res.status(404).json({ message: 'Job not found' });
+      }
+      
+      res.json({ message: 'Job deleted successfully' });
+  } catch (err) {
+      res.status(500).json({ message: err.message });
+  }
+});
 
 
 // ------------------------ Start Server ------------------------
